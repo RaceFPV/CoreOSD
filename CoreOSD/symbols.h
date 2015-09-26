@@ -1,45 +1,8 @@
 #ifndef SYMBOLS_H_
 #define SYMBOLS_H_
 
-
-// Satellite Graphics
-#define SYM_SAT 0XCE
-#define SYM_SAT_1 0XCF
-
-// Degrees Icon for HEADING/DIRECTION HOME
-#define SYM_DEGREES 0XBC
-
-// Direction arrows
-#define SYM_ARROW_SOUTH 0X60
-#define SYM_ARROW_SOUTH_1 0X61
-#define SYM_HEADING_POINTER 0X99
-
-// GPS Coordinates and Altitude
-#define SYM_LAT 0xCA
-#define SYM_LON 0XCB
-#define SYM_GPS 0XA3
-
 // Altitude
 #define SYM_ALT 0XCC
-
-// GPS Mode
-#define SYM_3DFIX 0X9D
-#define SYM_HOLD 0X8A
-#define SYM_G_HOME 0X9A
-
-// SensorÂ´s Presence
-#define SYM_ACC 0X02
-#define SYM_MAG 0X12
-#define SYM_BAR 0X13
-#define SYM_GPS 0X03
-#define SYM_CHECK 0XBD
-
-// SensorÂ´s Active
-#define SYM_ACC_ON 0XA0
-#define SYM_MAG_ON 0XA1
-#define SYM_BAR_ON 0XA2
-#define SYM_GPS_ON 0XA3
-#define SYM_GPS_SEARCH 0XA3
 
 // AH Center screen Graphics
 #define SYM_AH_CENTER 0XC5
@@ -133,56 +96,14 @@
 #define SYM_ON 0X9B
 #define SYM_FLY 0X9C
 
-// Throttle
-#define SYM_THR_POINTER_DIV_HIGH 0X0A
-#define SYM_THR_POINTER_DIV_LOW 0X0B
-#define SYM_THR_POINTER_TOP 0X09
-#define SYM_THR_POINTER_4 0X08
-#define SYM_THR_POINTER_3 0X1B
-#define SYM_THR_POINTER_2 0X1A
-#define SYM_THR_POINTER_1 0X19
-#define SYM_THR_POINTER_BOT 0X18
-#define SYM_THR_SCALE_LOW 0X07
-#define SYM_THR_SCALE_MED 0X17
-#define SYM_THR_SCALE_MAX 0X16
-
-// Stall Warning
-#define SYM_THR_STALL 0XBE
-#define SYM_THR_STALL1 0XBF
-
-//Warn sign
-#define SYM_WARN 0XA5
-#define SYM_WARN_1 0XA6
-#define SYM_WARN_2 0XA7
-
 // RSSI
 #define SYM_RSSI 0XBB
 
 // Menu cursor
 #define SYM_CURSOR 0XCD
 
-//Autopilot
-#define SYM_AUTOPILOT 0X1C
-#define SYM_AUTOPILOT_1 0X1D
-#define SYM_AUTOPILOT_2 0X1E
-#define SYM_AUTOPILOT_3 0X1F
-
-//Armed/Disarmed
-#define SYM_MOTOR_DIS 0X0C
-#define SYM_MOTOR_AR 0X0D
-#define SYM_MOTOR_ME 0X0E
-#define SYM_MOTOR_D 0X0F
-
 //LOS
 #define SYM_LOS 0X8B
-
-//SPEED
-#define SYM_SPEED 0X8C
-#define SYM_SPEED_1 0X8D
-
-//Vertical Speed
-#define SYM_VSPEED 0X9F
-
 
 
 #endif /* SYMBOLS_H_ */

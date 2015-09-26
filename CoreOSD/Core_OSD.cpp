@@ -88,20 +88,9 @@ MW_ANALOG_t MW_ANALOG;
 uint8_t armed=0;
 uint8_t previousarmedstatus=0;  // for statistics after disarming
 
-GPS_t GPS;
-
-//For Current Throttle
-uint16_t LowT = 1100;
-uint16_t HighT = 1900;
-
 // For Time
 uint16_t onTime=0;
 uint16_t flyTime=0;
-// For Heading
-/*const char headGraph[] PROGMEM = {
-  0XFB,0XFE,0XFD,0XFE,0XFA,0XFE,0XFD,0XFE,0XFC,0XFE,0XFD,0XFE,0XF9,0XFE,0XFD,0XFE,0XFB,0XFE,0XFD,0XFE,0XFA,0XFE,0XFD,0XFE,0XFC,0};*/
-const char headGraph[] PROGMEM = {
-  0XFB,0XFE,0XFA,0XFE,0XFC,0XFE,0XF9,0XFE,0XFB,0XFE,0XFA,0XFE,0XFC,0};
 
 //static int16_t MwHeading=0;
 
@@ -128,187 +117,8 @@ static int16_t temperature=0;                  // temperature in degrees Centigr
 
 
 // For Statistics
-uint16_t speedMAX=0;
 int8_t temperMAX=0;
-int16_t altitudeMAX=0;
-int16_t distanceMAX=0;
-float trip=0;
 uint16_t flyingTime=0;
-
-// For Intro
-const char message0[] PROGMEM = "KV_OSD_TEAM_2.3.2";
-const char message5[] PROGMEM = "MW VER:";
-const char message6[] PROGMEM = "MENU:THRT MIDDLE";
-const char message7[] PROGMEM = "YAW RIGHT";
-const char message8[] PROGMEM = "PITCH FULL";
-const char message9[] PROGMEM = "UNIQUE ID:";         // Call Sign on the beginning of the transmission
-
-// For Config menu common
-const char configMsgON[] PROGMEM = "ON";
-const char configMsgOFF[] PROGMEM = "OFF";
-const char configMsgNoAct[] PROGMEM = "--";
-const char configMsgEXIT[] PROGMEM = "EXIT";
-const char configMsgSAVE[] PROGMEM = "SAVE-EXIT";
-const char configMsgPGS[] PROGMEM = "<PAGE>";
-const char configMsgNTSC[] PROGMEM = "NTSC";
-const char configMsgPAL[] PROGMEM = "PAL";
-
-// For Config pages
-//-----------------------------------------------------------Page1
-const char configMsg10[] PROGMEM = "1/9 PID CONFIG";
-const char configMsg11[] PROGMEM = "ROLL";
-const char configMsg12[] PROGMEM = "PITCH";
-const char configMsg13[] PROGMEM = "YAW";
-const char configMsg14[] PROGMEM = "ALT";
-const char configMsg15[] PROGMEM = "GPS";
-const char configMsg16[] PROGMEM = "LEVEL";
-const char configMsg17[] PROGMEM = "MAG";
-//-----------------------------------------------------------Page2
-const char configMsg20[] PROGMEM = "2/9 RC TUNING";
-const char configMsg21[] PROGMEM = "RC RATE";
-const char configMsg22[] PROGMEM = "EXPONENTIAL";
-const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
-const char configMsg24[] PROGMEM = "YAW RATE";
-const char configMsg25[] PROGMEM = "THROTTLE PID ATT";
-const char configMsg26[] PROGMEM = "MWCYCLE TIME";
-const char configMsg27[] PROGMEM = "MWI2C ERRORS";
-//-----------------------------------------------------------Page3
-const char configMsg30[] PROGMEM = "3/9 SUPPLY & ALARM";
-const char configMsg31[] PROGMEM = "VOLTAGE ALARM";
-//const char configMsg32[] PROGMEM = "SET TEMP ALARM";                 // Do not remove yet
-const char configMsg33[] PROGMEM = "BLINKING FREQ";
-//-----------------------------------------------------------Page4
-const char configMsg40[] PROGMEM = "4/9 RSSI";
-const char configMsg41[] PROGMEM = "ACTUAL RSSI RAW";
-const char configMsg42[] PROGMEM = "ACTUAL RSSI %";
-const char configMsg43[] PROGMEM = "SET RSSI MIN";
-const char configMsg44[] PROGMEM = "SET RSSI MAX";
-//-----------------------------------------------------------Page5
-const char configMsg50[] PROGMEM = "5/9 CALIBRATION";
-const char configMsg51[] PROGMEM = "ACC CALIBRATION";
-const char configMsg52[] PROGMEM = "ACC ROLL";
-const char configMsg53[] PROGMEM = "ACC PITCH";
-const char configMsg54[] PROGMEM = "ACC Z";
-const char configMsg55[] PROGMEM = "MAG CALIBRATION";
-const char configMsg56[] PROGMEM = "HEADING";
-const char configMsg57[] PROGMEM = "MW EEPROM WRITE";
-//-----------------------------------------------------------Page6
-const char configMsg60[] PROGMEM = "6/9 GPS";
-const char configMsg61[] PROGMEM = "DISPLAY GPS DATA";
-const char configMsg62[] PROGMEM = "GPS COORD";
-const char configMsg63[] PROGMEM = "CALLSIGN";
-//-----------------------------------------------------------Page7
-const char configMsg70[] PROGMEM = "7/9 ADV SETUP";
-const char configMsg71[] PROGMEM = "RESET STATS";
-const char configMsg72[] PROGMEM = "HEADING 0-360";
-const char configMsg73[] PROGMEM = "UNIT SYST";
-const char configMsg74[] PROGMEM = "METRIC";
-const char configMsg75[] PROGMEM = "IMPERL";
-const char configMsg76[] PROGMEM = "VIDEO SYST";
-//-----------------------------------------------------------Page8
-const char configMsg80[] PROGMEM = "8/9 SCREEN ITEM POS";
-const char configMsg81[] PROGMEM = "ITEM      DSP LINE COL";
-const char configMsg82[] PROGMEM = "DEFAULT-EXIT";
-//-----------------------------------------------------------Page9
-const char configMsg90[] PROGMEM = "9/9 STATS";
-const char configMsg91[] PROGMEM = "TRIP";
-const char configMsg92[] PROGMEM = "MAX DISTANCE";
-const char configMsg93[] PROGMEM = "MAX ALTITUDE";
-const char configMsg94[] PROGMEM = "MAX SPEED";
-const char configMsg95[] PROGMEM = "FLYING TIME";
-const char configMsg96[] PROGMEM = "AMPS DRAINED";
-const char configMsg97[] PROGMEM = "MAX TEMP";
-
-
-// Variables for items pos change on screen
-//-----------------------------------------------------------
-int8_t screenitemselect=0; // pointer for item text strings
-int8_t screen_pos_item_pointer=EEPROM_SETTINGS+1;  // pointer for first item display/row/col positions 
-
-// Strings for item select on screen
-//-----------------------------------------------------------
-const char screen_item_00[] PROGMEM = "NUM SAT";
-const char screen_item_01[] PROGMEM = "DIR TO HOME";
-const char screen_item_02[] PROGMEM = "DIST TO HOME";
-const char screen_item_03[] PROGMEM = "GPS SPEED";
-const char screen_item_04[] PROGMEM = "ANGLE TO HOM";
-//const char screen_item_05[] PROGMEM = "GPS ALTITUDE";
-const char screen_item_05[] PROGMEM = "SENSORS";
-const char screen_item_06[] PROGMEM = "FLIGHT MODE";
-const char screen_item_07[] PROGMEM = "HEADING";
-const char screen_item_08[] PROGMEM = "HEAD GRAPH";
-//const char screen_item_09[] PROGMEM = "TEMPERATURE";  //Do not remove yet
-const char screen_item_09[] PROGMEM = "BARO ALTIT";
-const char screen_item_10[] PROGMEM = "CLIMB RATE";
-const char screen_item_11[] PROGMEM = "HORIZON";
-const char screen_item_12[] PROGMEM = "AH SIDE REF";
-const char screen_item_13[] PROGMEM = "AH CENTR REF";
-const char screen_item_14[] PROGMEM = "THROTTLE";
-const char screen_item_15[] PROGMEM = "FLY TIME";
-const char screen_item_16[] PROGMEM = "ON TIME";
-const char screen_item_17[] PROGMEM = "ARMED INDIC";
-const char screen_item_18[] PROGMEM = "GPS LATIT";
-const char screen_item_19[] PROGMEM = "GPS LONGIT";
-const char screen_item_20[] PROGMEM = "RSSI";
-const char screen_item_21[] PROGMEM = "MAIN BATT";
-const char screen_item_22[] PROGMEM = "MAIN BAT EVO";
-const char screen_item_23[] PROGMEM = "VIDEO BATT";
-const char screen_item_24[] PROGMEM = "AMPERAGE";
-const char screen_item_25[] PROGMEM = "MA/H CONSUM";
-const char screen_item_26[] PROGMEM = "CALLSIGN";
-
-PROGMEM const char * const item_table[] =
-{
-	screen_item_00,
-	screen_item_01,
-	screen_item_02,
-	screen_item_03,
-	screen_item_04,
-	screen_item_05,
-	screen_item_06,
-	screen_item_07,
-	screen_item_08,
-	screen_item_09,
-	screen_item_10,
-	screen_item_11,
-	screen_item_12,
-	screen_item_13,
-	screen_item_14,
-	screen_item_15,
-	screen_item_16,
-	screen_item_17,
-	screen_item_18,
-	screen_item_19,
-	screen_item_20,
-	screen_item_21,
-	screen_item_22,
-	screen_item_23,
-	screen_item_24,
-	screen_item_25,
-	screen_item_26,
-	//screen_item_27,
-};
-
-
-/* POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
-const unsigned char speedUnitAdd[2] ={
-SYM_KMH_1,SYM_MPH_1} ;                               // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
-const unsigned char speedUnitAdd1[2] ={
-SYM_KMH_2,SYM_MPH_2} ;
-const unsigned char temperatureUnitAdd[2] = {
-0x0e,0x0d};
-*/
-
-// POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
-const char MultiWiiLogoL1Add[17] PROGMEM = {
-0xd0,0xd1,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xdb,0xdc,0xdd,0};
-const char MultiWiiLogoL2Add[17] PROGMEM = {
-0xe0,0xe1,0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xeb,0xec,0xed,0};
-const char MultiWiiLogoL3Add[17] PROGMEM = {
-0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0};
-
-static const char KVTeamVersionPosition = 35;
-
 
 //-------------- Timed Service Routine vars (No need Metro.h library)
 uint16_t previous_millis_low=0;
@@ -316,20 +126,6 @@ uint16_t previous_millis_high =0;
 uint8_t hi_speed_cycle = 50;
 uint8_t lo_speed_cycle = 100;
 //----------------
-
-
-void calculateTrip(void)
-{
-	if(GPS.fix && armed && (GPS.speed>0)) {
-		if(Settings[S_UNITSYSTEM])
-		      trip += GPS.speed *0.0016404;     //  50/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
-		//trip += GPS.speed*screen_update_cycle_time*0.000032808;     //  1/(100*1000)*3.2808=0.000032808     cm/sec ---> ft/msec
-		else
-		      trip += GPS.speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)
-		//trip += GPS.speed*screen_update_cycle_time*0.00001;        //  1/(100*1000)=0.00001               cm/sec ---> mt/msec (trip var is float)
-	}
-}
-
 
 void calculateRssi(void)
 {
@@ -372,40 +168,11 @@ void setMspRequests() {
   if(fontMode) {
       modeMSPRequests = REQ_MSP_FONT;
   }
-  else if(configMode) {
-    modeMSPRequests = 
-      REQ_MSP_IDENT|
-      REQ_MSP_STATUS|
-      REQ_MSP_RAW_GPS|
-      REQ_MSP_ATTITUDE|
-      REQ_MSP_RAW_IMU|
-      REQ_MSP_ALTITUDE|
-      REQ_MSP_RC_TUNING|
-      REQ_MSP_PID|
-      REQ_MSP_RC;
-  }
   else {
-    modeMSPRequests = 
-      REQ_MSP_IDENT|
-      REQ_MSP_STATUS|
-      REQ_MSP_RAW_GPS|
-      REQ_MSP_COMP_GPS|
-      REQ_MSP_ATTITUDE|
-      REQ_MSP_RAW_IMU|      
-	  REQ_MSP_ALTITUDE;
-
-    if(MW_STATUS.version == 0)
-      modeMSPRequests |= REQ_MSP_IDENT;
-
-    if(!armed || Settings[L_CURRENTTHROTTLEPOSITIONDSPL])
-      modeMSPRequests |= REQ_MSP_RC;
-
-    if(mode_armed == 0) {
-        modeMSPRequests |= REQ_MSP_BOX;
-
+    modeMSPRequests =
+      REQ_MSP_RAW_IMU;
     }
-  }
- 
+   
   if(Settings[S_MAINVOLTAGE_VBAT] ||
      Settings[S_VIDVOLTAGE_VBAT] ||
      Settings[S_MWRSSI])
@@ -506,8 +273,7 @@ void loop()
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
   {
     previous_millis_high = currentMillis;   
-
-    calculateTrip();      // Speed integration on 50msec
+    
     if (!Settings[S_MWAMPERAGE]) calculateAmperage();  // Amperage and amperagesum integration on 50msec
     
       uint8_t MSPcmdsend;
@@ -528,26 +294,8 @@ void loop()
       case REQ_MSP_RC:
         MSPcmdsend = MSP_RC;
         break;
-      case REQ_MSP_RAW_GPS:
-        MSPcmdsend = MSP_RAW_GPS;
-        break;
-      case REQ_MSP_COMP_GPS:
-        MSPcmdsend = MSP_COMP_GPS;
-        break;
-      case REQ_MSP_ATTITUDE:
-        MSPcmdsend = MSP_ATTITUDE;
-        break;
-      case REQ_MSP_ALTITUDE:
-        MSPcmdsend = MSP_ALTITUDE;
-        break;
       case REQ_MSP_ANALOG:
         MSPcmdsend = MSP_ANALOG;
-        break;
-      case REQ_MSP_RC_TUNING:
-        MSPcmdsend = MSP_RC_TUNING;
-        break;
-      case REQ_MSP_PID:
-        MSPcmdsend = MSP_PID;
         break;
       case REQ_MSP_BOX:
         MSPcmdsend = MSP_BOXIDS;
@@ -561,12 +309,7 @@ void loop()
 
     //MAX7456_DrawScreen();
     
-    if( allSec < 6 ){
-      displayIntro(KVTeamVersionPosition);
-      lastCallSign = onTime;
-    }  
-    else
-    {
+
       if(armed){
         previousarmedstatus=1;
       }
@@ -577,13 +320,6 @@ void loop()
         configMode=1;
         setMspRequests();
       }
-      if(fontMode) {
-         displayFontScreen();
-      }
-      else if(configMode)
-      {
-        displayConfigScreen();
-      }
       else
       {
         
@@ -591,49 +327,14 @@ void loop()
         displayVidVoltage();
         displayRSSI();
         displayTime();
-        displaySensor();
-        displayGPSMode();
-        displayMode();
         //if((temperature<Settings[S_TEMPERATUREMAX])||(BlinkAlarm)) displayTemperature();
         displayAmperage();
         displaypMeterSum();
-        displayArmed();
-        displayCurrentThrottle();
-        displayautoPilot(); 
-
-        if ( (onTime > (lastCallSign+300)) || (onTime < (lastCallSign+4)))
-       {
-           // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (lastCallSign+300))lastCallSign = onTime; 
-        displayCallsign(); 
-       
-       }
 
         if(MW_STATUS.sensorPresent&ACCELEROMETER)
            displayHorizon(MW_ATT.Angle[0],MW_ATT.Angle[1]);
-
-        if(MW_STATUS.sensorPresent&MAGNETOMETER) {
-          displayHeadingGraph();
-          displayHeading();
-        }
-
-        if(MW_STATUS.sensorPresent&BAROMETER) {
-          displayAltitude();
-          displayClimbRate();
-        }
-
-        if(MW_STATUS.sensorPresent&GPSSENSOR) 
-          if(Settings[S_DISPLAYGPS]){
-            displayNumberOfSat();
-            displayDirectionToHome();
-            displayDistanceToHome();
-            displayAngleToHome();
-            displayGPS_speed();
-            displayGPSPosition();
-            //displayGPS_altitude(); // Do not remove yet
-          }
       }
-    }
+    
 	 MAX7456_DrawScreen();
   }  // End of fast Timed Service Routine (50ms loop)
 //---------------------  End of Timed Service Routine ---------------------------------------
@@ -661,26 +362,12 @@ void loop()
       setMspRequests();
     }
     allSec++;
-    
-    
-
-    if((accCalibrationTimer==1)&&(configMode)) {
-      blankserialRequest(MSP_ACC_CALIBRATION);
-      accCalibrationTimer=0;
-    }
-
-    if((magCalibrationTimer==1)&&(configMode)) {
-      blankserialRequest(MSP_MAG_CALIBRATION);
-      magCalibrationTimer=0;
-    }
 
     if((eepromWriteTimer==1)&&(configMode)) {
       blankserialRequest(MSP_EEPROM_WRITE);
       eepromWriteTimer=0;
     }
 
-    if(accCalibrationTimer>0) accCalibrationTimer--;
-    if(magCalibrationTimer>0) magCalibrationTimer--;
     if(eepromWriteTimer>0) eepromWriteTimer--;
 
     if((rssiTimer==1)&&(configMode)) {
