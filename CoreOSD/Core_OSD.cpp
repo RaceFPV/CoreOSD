@@ -36,7 +36,6 @@ uint16_t allSec=0;
 // Config status and cursor location
 uint8_t ROW=10;
 uint8_t COL=4;
-uint8_t configPage=MINPAGE;
 uint8_t configMode=0;
 uint8_t fontMode = 0;
 uint8_t fontData[54];
@@ -287,33 +286,15 @@ void loop()
     }
       if(!fontMode)
       blankserialRequest(MSPcmdsend);     
-
-    //MAX7456_DrawScreen();
-    
-
-      if(armed){
-        previousarmedstatus=1;
-      }
-      if(previousarmedstatus && !armed){
-        configPage=9;
-        ROW=10;
-        COL=1;
-        configMode=1;
-        setMspRequests();
-      }
-      else
-      {
-        
+      
         displayVoltage();
         displayRSSI();
-        displayTime();
-        //if((temperature<Settings[S_TEMPERATUREMAX])||(BlinkAlarm)) displayTemperature();
+        displayTime();;
         //displayAmperage();
         //displaypMeterSum();
 
         if(MW_STATUS.sensorPresent&ACCELEROMETER)
            displayHorizon(MW_ATT.Angle[0],MW_ATT.Angle[1]);
-      }
     
 	 MAX7456_DrawScreen();
   }  // End of fast Timed Service Routine (50ms loop)

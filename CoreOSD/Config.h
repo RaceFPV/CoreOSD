@@ -5,26 +5,13 @@
   // Variables
  #define METRIC 0
  #define IMPERIAL 1
- #define MAXSCREENITEMS 26 // 28 w/ GPS alt & Temperature (Movable items)
  
  //Analog input defines
  // **** WiteSpy hardware **** //
  #define voltagePin A0
- #define vidvoltagePin A2
  #define amperagePin A1
  #define rssiPin A3
  #define PWMrssiPin A3           // PWM RSSI uses same pin of analog RSSI A3
- //#define temperaturePin A6     // Temperature pin 6 for original Rushduino Board V1.2 (Does this still in use??)
-
- // **** JDrones hardware **** //
- /* Pins n. to be defined ......
- #define voltagePin A0
- #define vidvoltagePin A2
- #define amperagePin A1
- #define rssiPin A3
- #define PWMrssiPin A3
- #define temperaturePin A6       // Temperature pin 6 for original Rushduino Board V1.2
- */
  
 /**********************          Serial port Speed       *************************/
 
@@ -41,10 +28,6 @@
 /*----------------------------------------------       End of configurable parameters      ----------------------------------------------------*/
 
 #define ACCELEROMETER  1//0b00000001
-#define BAROMETER      2//0b00000010
-#define MAGNETOMETER   4//0b00000100
-#define GPSSENSOR      8//0b00001000
-//#define SONAR         16//0b00010000
 
 
 #define LINE      30
@@ -65,54 +48,6 @@
 #define LINE15    420
 #define LINE16    450
 
-// DEFINE CONFIGURATION MENU PAGES
-#define MINPAGE 1
-#define MAXPAGE 9
-
-#define PIDITEMS 10
-
-// RX CHANEL IN MwRcData table
-#define ROLLSTICK        0
-#define PITCHSTICK       1
-#define YAWSTICK         2
-#define THROTTLESTICK    3
-
-// STICK POSITION
-#define MAXSTICK         1900
-#define MINSTICK         1100
-#define MINTROTTLE       1000
-
-// FOR POSITION OF PID CONFIG VALUE
-#define ROLLT 93
-#define ROLLP 101
-#define ROLLI 107
-#define ROLLD 113
-#define PITCHT 93+(30*1)
-#define PITCHP 101+(30*1)
-#define PITCHI 107+(30*1)
-#define PITCHD 113+(30*1)
-#define YAWT 93+(30*2)
-#define YAWP 101+(30*2)
-#define YAWI 107+(30*2)
-#define YAWD 113+(30*2)
-#define ALTT 93+(30*3)
-#define ALTP 101+(30*3)
-#define ALTI 107+(30*3)
-#define ALTD 113+(30*3)
-#define VELT 93+(30*4)
-#define VELP 101+(30*4)
-#define VELI 107+(30*4)
-#define VELD 113+(30*4)
-#define LEVT 93+(30*5)
-#define LEVP 101+(30*5)
-#define LEVI 107+(30*5)
-#define LEVD 113+(30*5)
-#define MAGT 93+(30*6)
-#define MAGP 101+(30*6)
-#define MAGI 107+(30*6)
-#define MAGD 113+(30*6)
-
-#define SAVEP 93+(30*9)
 
 #endif /* CONFIG_H_ */
 
