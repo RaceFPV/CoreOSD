@@ -62,8 +62,6 @@ char screenBuffer[20];
 uint16_t MwRcData[8]={		// This hold receiver pulse signal
 1500,1500,1500,1500,1500,1500,1500,1500} ;
 	
-conf_t conf;
-MW_ALTTITUDE_t MW_ALT;
 MW_ATTITUDE_t MW_ATT;
 MW_status_t MW_STATUS;
 MW_imu_t MW_IMU;
@@ -167,7 +165,6 @@ void setMspRequests() {
     }
    
   if(Settings[S_MAINVOLTAGE_VBAT] ||
-     Settings[S_VIDVOLTAGE_VBAT] ||
      Settings[S_MWRSSI])
     modeMSPRequests |= REQ_MSP_ANALOG;
 
@@ -205,15 +202,6 @@ void loop()
       for (uint16_t i=0;i<8;i++)
         voltageRaw += voltageRawArray[i];
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] /1023; 
-    }
-    if (!Settings[S_VIDVOLTAGE_VBAT]) {     
-      static uint16_t ind = 0;
-      static uint32_t voltageRawArray[8];
-      voltageRawArray[(ind++)%8] = analogRead(vidvoltagePin);                  
-      uint16_t voltageRaw = 0;
-      for (uint16_t i=0;i<8;i++)
-        voltageRaw += voltageRawArray[i];
-      vidvoltage = float(voltageRaw) * Settings[S_VIDDIVIDERRATIO] /1023;  
     }
     if (!Settings[S_MWRSSI] && !Settings[S_PWMRSSI]) {
       rssiADC = analogRead(rssiPin)/4;  // RSSI Readings, rssiADC=0 to 1023/4 (avoid a number > 255)

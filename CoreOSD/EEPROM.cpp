@@ -31,20 +31,14 @@ static const uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 3,   // S_BATCELLS                  8
 100, // S_DIVIDERRATIO              9
 1,   // S_MAINVOLTAGE_VBAT          10
-100, // S_VIDDIVIDERRATIO           11
-0,   // S_VIDVOLTAGE_VBAT           12
-//90,  // S_TEMPERATUREMAX            13   // Do not remove yet
-1,   // S_BOARDTYPE                 14
 0,   // S_UNITSYSTEM                18
 1,   // S_VIDEOSIGNALTYPE           19
-0,   // S_RESETSTATISTICS           20
 1,   // S_ENABLEADC                 21
 5,   // S_BLINKINGHZ                22   // 10=1Hz, 9=1.1Hz, 8=1,25Hz, 7=1.4Hz, 6=1.6Hz, 5=2Hz, 4=2,5Hz, 3=3,3Hz, 2=5Hz, 1=10Hz
 0,   // S_MWAMPERAGE                23
 40,  // S_CURRSENSSENSITIVITY       24   // May vary from 17 to 40mV/A (Sensor type)
 2,   // S_CURRSENSOFFSET_H          25   // offset(H/L) =0 for unidir sensors or =512 for bidirectional sensors, may be changed only of few units.
 0,   // S_CURRSENSOFFSET_L          26   // 2H+0L=512
-105, // S_VIDVOLTAGEMIN             31
 };
 
 
