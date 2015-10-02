@@ -227,5 +227,6 @@ void MAX7456_DrawScreen()
   spi_transfer(B00000000);
   
   digitalWrite(MAX7456SELECT,HIGH);
+delay(20);
 }
 

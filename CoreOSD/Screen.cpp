@@ -225,7 +225,6 @@ void displayHorizon(int16_t rollAngle, int16_t pitchAngle)
  
 void displayVoltage(void)
 {
-  if(Settings[L_VOLTAGEPOSITIONDSPL]){
     if (Settings[S_MAINVOLTAGE_VBAT]){
       voltage=MW_ANALOG.VBat;
     }
@@ -235,9 +234,9 @@ void displayVoltage(void)
    }
    if(!(MW_STATUS.sensorActive) || (voltage <=(Settings[S_VOLTAGEMIN]+2))){ 
       ItoaPadded(voltage, screenBuffer, 4, 3);
-      screenBuffer[4] = SYM_VOLTS;
       screenBuffer[5] = 0;
-      MAX7456_WriteString(screenBuffer,((Settings[L_VOLTAGEPOSITIONROW]-1)*30) + Settings[L_VOLTAGEPOSITIONCOL]);
+      MAX7456_WriteString(screenBuffer,443);
+      //MAX7456_WriteString(screenBuffer,((Settings[L_VOLTAGEPOSITIONROW]-1)*30) + Settings[L_VOLTAGEPOSITIONCOL]);
       
     if(Settings[L_MAINBATLEVEVOLUTIONDSPL]){
       // For battery evolution display
@@ -256,57 +255,29 @@ void displayVoltage(void)
       else if (voltage < BATTEV6) screenBuffer[0]=SYM_BATT_5;
       else screenBuffer[0]=SYM_BATT_FULL;              // Max charge icon
       }
-      else {
-        screenBuffer[0]=SYM_MAIN_BATT;
-      }
       screenBuffer[1]=0;
-      MAX7456_WriteString(screenBuffer,((Settings[L_VOLTAGEPOSITIONROW]-1)*30) + Settings[L_VOLTAGEPOSITIONCOL]-1);
+      
+      MAX7456_WriteString(screenBuffer,443);
+      //MAX7456_WriteString(screenBuffer,((Settings[L_VOLTAGEPOSITIONROW]-1)*30) + Settings[L_VOLTAGEPOSITIONCOL]-1);
    }
-  }
-} 
-
-void displayVidVoltage(void)
-{
- if(!(MW_STATUS.sensorActive)){
-    if(Settings[L_VIDVOLTAGEPOSITIONDSPL]){    
-      if (Settings[S_VIDVOLTAGE_VBAT]){
-      vidvoltage=MW_ANALOG.VBat;
-      }
-      if (vidvoltage <=(Settings[S_VOLTAGEMIN]) && !BlinkAlarm){
-      ItoaPadded(vidvoltage, screenBuffer, 4, 3);
-      return;
-      }
-      ItoaPadded(vidvoltage, screenBuffer, 4, 3);
-      screenBuffer[4]=SYM_VOLTS;
-      screenBuffer[5]=0;
-      MAX7456_WriteString(screenBuffer,((Settings[L_VIDVOLTAGEPOSITIONROW]-1)*30) + Settings[L_VIDVOLTAGEPOSITIONCOL]);
-      screenBuffer[0]=SYM_VID_BAT;
-      screenBuffer[1]=0;
-      MAX7456_WriteString(screenBuffer,((Settings[L_VIDVOLTAGEPOSITIONROW]-1)*30) + Settings[L_VIDVOLTAGEPOSITIONCOL]-1);
-    }
-  }
-} 
+}  
 
 
 void displayTime(void)
 {
 // Fly Time
-  if(!(MW_STATUS.sensorActive)){
+  /*if(!(MW_STATUS.sensorActive)){
   if(Settings[L_FLYTIMEPOSITIONDSPL]){
       screenBuffer[0] = SYM_FLY;
       formatTime(flyTime, screenBuffer+1, 0);
       MAX7456_WriteString(screenBuffer,((Settings[L_FLYTIMEPOSITIONROW]-1)*30) + Settings[L_FLYTIMEPOSITIONCOL]);
   }
- }  
+ }*/  
  
 // On Time
- if(!(MW_STATUS.sensorActive)){
-  if(Settings[L_ONTIMEPOSITIONDSPL]){
-      screenBuffer[0] = SYM_ON;
       formatTime(onTime, screenBuffer+1, 0);
-      MAX7456_WriteString(screenBuffer,((Settings[L_ONTIMEPOSITIONROW]-1)*30) + Settings[L_ONTIMEPOSITIONCOL]);
-  }
- }
+      MAX7456_WriteString(screenBuffer,435);
+      //MAX7456_WriteString(screenBuffer,((Settings[L_ONTIMEPOSITIONROW]-1)*30) + Settings[L_ONTIMEPOSITIONCOL]);
 }
 
 void displayAmperage(void)

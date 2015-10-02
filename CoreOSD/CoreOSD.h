@@ -25,11 +25,7 @@
 	extern uint8_t TempBlinkAlarm;                       // Temporary for blink alarm
 	extern uint8_t BlinkAlarm;                           // This is turning on and off at selected freq. (alarm)
 	extern uint8_t Blink10hz;                            // This is turning on and off at 10hz
-	extern uint16_t lastCallSign;                         // callsign_timer
 	extern uint8_t rssiTimer;
-	extern uint8_t accCalibrationTimer;
-	extern uint8_t magCalibrationTimer;
-	extern uint8_t eepromWriteTimer;
 	extern uint16_t allSec;
 
 	// Config status and cursor location
@@ -77,24 +73,7 @@
 	extern int8_t screen_pos_item_pointer;  // 0; // pointer for first item display/row/col positions
         	
 	extern PROGMEM const char * const item_table[];
-	
-	// POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
-	extern const unsigned char speedUnitAdd[];
-	extern const unsigned char speedUnitAdd1[];
-	extern const unsigned char temperatureUnitAdd[];
-	extern const char MultiWiiLogoL1Add[] PROGMEM;
-	extern const char MultiWiiLogoL2Add[] PROGMEM;
-	extern const char MultiWiiLogoL3Add[] PROGMEM;
-	extern const unsigned char MwAltitudeAdd[];
-	extern const unsigned char MwClimbRateAdd[];
-	extern const unsigned char GPS_distanceToHomeAdd[];
-	extern const unsigned char GPS_distanceToHomeAdd1[];
-	extern const unsigned char MwGPSAltPositionAdd[];
-	extern const unsigned char MwGPSAltPositionAdd1[];
-	//extern const char KVTeamVersionPosition;
 
-	//void initFontMode();
-	//int16_t getNextCharToRequest();
 	void resetFunc();
 			
 #endif

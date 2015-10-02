@@ -46,13 +46,6 @@ uint8_t retransmitQueue;
 
 // Mode bits
 uint32_t mode_armed;
-uint32_t mode_stable;
-uint32_t mode_horizon;
-uint32_t mode_baro;
-uint32_t mode_mag;
-uint32_t mode_gpshome;
-uint32_t mode_gpshold;
-uint32_t mode_osd_switch;
 
 uint32_t modeMSPRequests;
 uint32_t queuedMSPRequests;
@@ -324,12 +317,11 @@ void loop()
       {
         
         displayVoltage();
-        displayVidVoltage();
         displayRSSI();
         displayTime();
         //if((temperature<Settings[S_TEMPERATUREMAX])||(BlinkAlarm)) displayTemperature();
-        displayAmperage();
-        displaypMeterSum();
+        //displayAmperage();
+        //displaypMeterSum();
 
         if(MW_STATUS.sensorPresent&ACCELEROMETER)
            displayHorizon(MW_ATT.Angle[0],MW_ATT.Angle[1]);
