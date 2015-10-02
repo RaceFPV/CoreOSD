@@ -169,7 +169,6 @@ void MAX7456_writeNVM(uint8_t char_address)
 		spi_transfer(MAX7456ADD_CMAL); // set start address low
 		spi_transfer(x);
 		spi_transfer(MAX7456ADD_CMDI);
-		spi_transfer(fontData[x]);
 	}
 
 	// transfer 54 bytes from shadow ram to NVM

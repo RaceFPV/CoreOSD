@@ -6,7 +6,6 @@
 #include "EEPROM.h" //Needed to access eeprom read/write functions
 #include "Max7456.h"
 #include "Serial.h"
-#include "Protocol.h"
 #include "symbols.h"
 #include "Screen.h"
 #include "CoreOSD.h"
@@ -25,23 +24,9 @@ uint8_t tenthSec=0;
 uint8_t TempBlinkAlarm=0;                       // Temporary for blink alarm
 uint8_t BlinkAlarm=0;                           // This is turning on and off at selected freq. (alarm)
 uint8_t Blink10hz=0;                            // This is turning on and off at 10hz
-uint16_t lastCallSign=0;                         // callsign_timer
 uint8_t rssiTimer=0;
-uint8_t accCalibrationTimer=0;
-uint8_t magCalibrationTimer=0;
-uint8_t eepromWriteTimer=0;
 
 uint16_t allSec=0;
-
-// Config status and cursor location
-uint8_t ROW=10;
-uint8_t COL=4;
-uint8_t configMode=0;
-uint8_t fontMode = 0;
-uint8_t fontData[54];
-uint8_t nextCharToRequest;
-uint8_t lastCharToRequest;
-uint8_t retransmitQueue;
 
 // Mode bits
 uint32_t mode_armed;
@@ -81,8 +66,6 @@ uint8_t previousarmedstatus=0;  // for statistics after disarming
 // For Time
 uint16_t onTime=0;
 uint16_t flyTime=0;
-
-//static int16_t MwHeading=0;
 
 // For Amperage
 float amperageADC =0;
@@ -147,29 +130,8 @@ void setup()
   MAX7456_Setup();
   
   analogReference(DEFAULT);
-
-  setMspRequests();
-
-  blankserialRequest(MSP_IDENT);
 }
 
-
-void setMspRequests() {
-  if(fontMode) {
-      modeMSPRequests = REQ_MSP_FONT;
-  }
-  else {
-    modeMSPRequests =
-      REQ_MSP_RAW_IMU;
-    }
-   
-  if(Settings[S_MAINVOLTAGE_VBAT] ||
-     Settings[S_MWRSSI])
-    modeMSPRequests |= REQ_MSP_ANALOG;
-
-  // so we do not send requests that are not needed.
-  queuedMSPRequests &= modeMSPRequests;
-}
 
 void calculateAmperage(void)
 {
@@ -243,8 +205,6 @@ void loop()
 	TempBlinkAlarm++;
 	Blink10hz=!Blink10hz;
 	
-	if(!fontMode)
-      blankserialRequest(MSP_ATTITUDE);
       
     if(Settings[L_RSSIPOSITIONDSPL])
       calculateRssi();      
@@ -255,37 +215,7 @@ void loop()
     previous_millis_high = currentMillis;   
     
     if (!Settings[S_MWAMPERAGE]) calculateAmperage();  // Amperage and amperagesum integration on 50msec
-    
-      uint8_t MSPcmdsend;
-      if(queuedMSPRequests == 0)
-        queuedMSPRequests = modeMSPRequests;
-    uint32_t req = queuedMSPRequests & -queuedMSPRequests;
-    queuedMSPRequests &= ~req;
-      switch(req) {
-      case REQ_MSP_IDENT:
-        MSPcmdsend = MSP_IDENT;
-        break;
-      case REQ_MSP_STATUS:
-        MSPcmdsend = MSP_STATUS;
-        break;
-      case REQ_MSP_RAW_IMU:
-        MSPcmdsend = MSP_RAW_IMU;
-        break;
-      case REQ_MSP_RC:
-        MSPcmdsend = MSP_RC;
-        break;
-      case REQ_MSP_ANALOG:
-        MSPcmdsend = MSP_ANALOG;
-        break;
-      case REQ_MSP_BOX:
-        MSPcmdsend = MSP_BOXIDS;
-         break;
-      case REQ_MSP_FONT:
-        MSPcmdsend = MSP_OSD;
-      break;
-    }
-      if(!fontMode)
-      blankserialRequest(MSPcmdsend);     
+       
       
         displayVoltage();
         displayRSSI();
@@ -319,26 +249,11 @@ void loop()
     else {
       flyTime++;
       flyingTime++;
-      configMode=0;
-      setMspRequests();
     }
     allSec++;
 
-    if((eepromWriteTimer==1)&&(configMode)) {
-      blankserialRequest(MSP_EEPROM_WRITE);
-      eepromWriteTimer=0;
-    }
-
-    if(eepromWriteTimer>0) eepromWriteTimer--;
-
-    if((rssiTimer==1)&&(configMode)) {
-      Settings[S_RSSIMIN]=rssiADC;  // set MIN RSSI signal received (tx off?)
-      rssiTimer=0;
-    }
     if(rssiTimer>0) rssiTimer--;
   }
-  
-  serialMSPreceive();
 
 }  // End of main loop
 
