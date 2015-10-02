@@ -6,7 +6,6 @@
 	extern uint8_t Settings[];
 	extern char screen[];
 	extern char screenBuffer[];
-	extern conf_t conf;
 	extern MW_ATTITUDE_t MW_ATT;
 	extern MW_imu_t MW_IMU;
 	extern uint16_t MwRcData[];
