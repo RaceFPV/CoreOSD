@@ -1,7 +1,6 @@
-# CoreOSD v 0.1
+# CoreOSD v 0.2
 
 Alpha build
 
-* Requires baseflight/cleanflight
-* Expects battery monitoring configured on microminimosd or naze
+* Expects battery wired to microminimosd
 * Currently supporting Arduino IDE 1.6.3 and older
