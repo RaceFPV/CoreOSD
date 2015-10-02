@@ -5,7 +5,7 @@
 #include "CoreOSD.h"
 #include "Screen.h"
 
-
+//for calculating amperage
 char *ItoaPadded(int16_t val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   uint8_t neg = 0;
   if(val < 0) {
@@ -31,35 +31,6 @@ char *ItoaPadded(int16_t val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   while(bytes != 0)
     str[--bytes] = ' ';
   return str;
-}
-
-char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
-  if(val < 0) {
-    pos = neg;
-    val = -val;
-  }
-
-//  uint8_t bytes = p+8;
-  uint8_t bytes = p+6;  
-  val = val / 100;  //  5 decimals instead of 6 after dot
-  
-  str[bytes] = 0;
-  str[--bytes] = pos;
-  for(;;) {
-    if(bytes == p) {
-      str[--bytes] = DECIMAL;
-      continue;
-    }
-    str[--bytes] = '0' + (val % 10);
-    val = val / 10;
-    if(bytes < 3 && val == 0)
-       break;
-   }
-
-   while(bytes != 0)
-     str[--bytes] = ' ';
-
-   return str;
 }
 
 // Take time in Seconds and format it as 'MM:SS'
@@ -95,30 +66,6 @@ uint8_t FindNull(void)
     ;
   return xx;
 }
-
-
-/*void displayTemperature(void)        // WILL WORK ONLY WITH Rushduino V1.2      //Lets see about complains on this function (during two major releases)  before remove...
-{
- if(!(MW_STATUS.sensorActive&mode_osd_switch)){  // mode_osd_switch=0 --> Display, =1 --> Hide
-  if(Settings[L_TEMPERATUREPOSDSPL]){
-    int16_t xxx;
-    if (Settings[S_UNITSYSTEM])
-      xxx = temperature*1.8+32;       //Fahrenheit conversion for imperial system.
-    else
-      xxx = temperature;
-  
-    if(xxx > temperMAX)
-      temperMAX = xxx;
-  
-    itoa(xxx,screenBuffer,10);
-    uint8_t xx = FindNull();   // find the NULL
-    screenBuffer[xx++]=temperatureUnitAdd[Settings[S_UNITSYSTEM]];
-    screenBuffer[xx]=0;  // Restore the NULL
-    MAX7456_WriteString(screenBuffer,((Settings[L_TEMPERATUREPOSROW]-1)*30) + Settings[L_TEMPERATUREPOSCOL]);
-  }
- }
-}
-*/
 
 void displayHorizon(int16_t rollAngle, int16_t pitchAngle)
 {
@@ -229,7 +176,7 @@ void displayVoltage(void)
       voltage=MW_ANALOG.VBat;
     }
       if (voltage <=(Settings[S_VOLTAGEMIN]) && !BlinkAlarm){  
-      ItoaPadded(voltage, screenBuffer, 4, 3);
+      //ItoaPadded(voltage, screenBuffer, 4, 3);
       return;
    }
    if(!(MW_STATUS.sensorActive) || (voltage <=(Settings[S_VOLTAGEMIN]+2))){ 
@@ -237,7 +184,7 @@ void displayVoltage(void)
       screenBuffer[5] = 0;
       MAX7456_WriteString(screenBuffer,443);
       //MAX7456_WriteString(screenBuffer,((Settings[L_VOLTAGEPOSITIONROW]-1)*30) + Settings[L_VOLTAGEPOSITIONCOL]);
-      
+      /*
     if(Settings[L_MAINBATLEVEVOLUTIONDSPL]){
       // For battery evolution display
       int16_t BATTEV1 =Settings[S_BATCELLS] * 35;
@@ -254,7 +201,7 @@ void displayVoltage(void)
       else if (voltage < BATTEV5) screenBuffer[0]=SYM_BATT_4;
       else if (voltage < BATTEV6) screenBuffer[0]=SYM_BATT_5;
       else screenBuffer[0]=SYM_BATT_FULL;              // Max charge icon
-      }
+      }*/
       screenBuffer[1]=0;
       
       MAX7456_WriteString(screenBuffer,443);
@@ -275,7 +222,7 @@ void displayTime(void)
  }*/  
  
 // On Time
-      formatTime(onTime, screenBuffer+1, 0);
+      formatTime(onTime, screenBuffer, 0);
       MAX7456_WriteString(screenBuffer,435);
       //MAX7456_WriteString(screenBuffer,((Settings[L_ONTIMEPOSITIONROW]-1)*30) + Settings[L_ONTIMEPOSITIONCOL]);
 }
@@ -286,7 +233,6 @@ void displayAmperage(void)
  if(!(MW_STATUS.sensorActive)){
   if(Settings[L_AMPERAGEPOSITIONDSPL]){
     ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
-    screenBuffer[4] = SYM_AMPS;
     screenBuffer[5] = 0;
     MAX7456_WriteString(screenBuffer,((Settings[L_AMPERAGEPOSITIONROW]-1)*30) + Settings[L_AMPERAGEPOSITIONCOL]);
   }
@@ -296,10 +242,9 @@ void displayAmperage(void)
 void displaypMeterSum(void)
 {
 
-  if(Settings[L_PMETERSUMPOSITIONDSPL]){    
-    screenBuffer[0]=SYM_CURRENT;
+  if(Settings[L_PMETERSUMPOSITIONDSPL]){  
     screenBuffer[1]=0;
-    itoa(amperagesum,screenBuffer+1,10);
+    itoa(amperagesum,screenBuffer,10);
 	 if(!(MW_STATUS.sensorActive))
 		MAX7456_WriteString(screenBuffer,((Settings[L_PMETERSUMPOSITIONROW]-1)*30) + Settings[L_PMETERSUMPOSITIONCOL]);
  }
@@ -309,14 +254,10 @@ void displayRSSI(void)
 {
   if(Settings[L_RSSIPOSITIONDSPL]){
     if (rssi <=(Settings[S_RSSI_ALARM]) && !BlinkAlarm){
-      screenBuffer[0] = SYM_RSSI;
       return;
       }
-    screenBuffer[0] = SYM_RSSI;
-    // Calcul et affichage du Rssi
-    itoa(rssi,screenBuffer+1,10);
+    itoa(rssi,screenBuffer,10);
     uint8_t xx = FindNull();
-    screenBuffer[xx++] = '%';
     screenBuffer[xx] = 0;
   }
 }

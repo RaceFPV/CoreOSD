@@ -83,14 +83,8 @@ int16_t rssi_Int=0;
 
 // For Voltage
 uint16_t voltage=0;                      // its the value x10
-uint16_t vidvoltage=0;                   // its the value x10
-
-// For temperature
-static int16_t temperature=0;                  // temperature in degrees Centigrade
-
 
 // For Statistics
-int8_t temperMAX=0;
 uint16_t flyingTime=0;
 
 //-------------- Timed Service Routine vars (No need Metro.h library)
@@ -154,7 +148,6 @@ void loop()
 {
        // Process AI   
   if (Settings[S_ENABLEADC]){
-    //temperature=(analogRead(temperaturePin)-102)/2.048; // Does someone use this ATM??
     if (!Settings[S_MAINVOLTAGE_VBAT]){
       static uint16_t ind = 0;
       static uint32_t voltageRawArray[8];
@@ -186,13 +179,6 @@ void loop()
   if (Settings[S_PWMRSSI] && !Settings[S_MWRSSI]){
 	rssiADC = pulseIn(PWMrssiPin, HIGH,15000)/Settings[S_PWMRSSIDIVIDER]; // Reading W/time out (microseconds to wait for pulse to start: 15000=0.015sec)
     }
-   
-  // Blink Basic Sanity Test Led at 1hz - this stuff introduces strange behavior on my system
-  if(tenthSec>10)
-    digitalWrite(7,HIGH);
-  else
-    digitalWrite(7,LOW);
-
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   uint16_t currentMillis = millis();

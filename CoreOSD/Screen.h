@@ -2,8 +2,6 @@
 #define SCREEN_H_
 #include "Arduino.h"
 
-	void displayTemperature(int16_t temp) ;
-	void displayMode(void);
 	void displayHorizon(int16_t rollAngle, int16_t pitchAngle);
 	void displayVoltage(void);
 	void displayTime(void);

@@ -100,10 +100,6 @@ uint8_t EEPROM_NTSC_DEFAULT[EEPROM_ITEM_LOCATION-EEPROM_SETTINGS] = {
 	// COL= Column position on screen (255= no action)
 	// DSPL= Display item on screen
 
-	/*12,  // L_TEMPERATUREPOSROW LINE11+2       // Do not remove yet
-	2,   // L_TEMPERATUREPOSCOL
-	0,   // L_TEMPERATUREPOSDSPL*/
-
 	6,   // L_HORIZONPOSITIONROW LINE06+8
 	8,   // L_HORIZONPOSITIONCOL
 	0,   // L_HORIZONPOSITIONDSPL
