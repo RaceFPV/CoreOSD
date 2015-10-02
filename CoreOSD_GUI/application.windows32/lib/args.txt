@@ -1,3 +1,0 @@
-
-KV_Team_OSD_GUI
-KV_Team_OSD_GUI.jar,core.jar,RXTXcomm.jar,serial.jar,controlP5.jar
