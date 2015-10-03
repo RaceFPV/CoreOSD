@@ -9,15 +9,12 @@ uint8_t MAX7456SELECT;                // output pin
 uint8_t MAX7456RESET;                 // output pin
 
 // Selectable by video mode
-//uint8_t ENABLE_display;
-//uint8_t ENABLE_display_vert;
-//uint8_t DISABLE_display;
 uint16_t MAX_screen_size;
 uint8_t MAX7456_reset;
 uint8_t MAX_screen_rows;
 
 
-volatile uint8_t vsync_wait = 0;
+volatile uint8_t vsync_wait = 1;
 
 
 //////////////////////////////////////////////////////////////

@@ -5,35 +5,19 @@
 #include "types.h"
 #include "EEPROM.h" //Needed to access eeprom read/write functions
 #include "Max7456.h"
-#include "Serial.h"
 #include "symbols.h"
 #include "Screen.h"
 #include "CoreOSD.h"
-
-// ----Variables---
-//Analog input defines
-//static const uint16_t voltagePin=0;
-//static const uint16_t vidvoltagePin=2;
-//static const uint16_t amperagePin=1;
-//static const uint16_t rssiPin=3;
-//static const uint16_t temperaturePin=6;            // Temperature pin 6 for original Rushduino Board V1.2
-static const uint8_t rssiSample=30;
 
 //General use variables
 uint8_t tenthSec=0;
 uint8_t TempBlinkAlarm=0;                       // Temporary for blink alarm
 uint8_t BlinkAlarm=0;                           // This is turning on and off at selected freq. (alarm)
 uint8_t Blink10hz=0;                            // This is turning on and off at 10hz
-uint8_t rssiTimer=0;
 
 uint16_t allSec=0;
 
 // Mode bits
-uint32_t mode_armed;
-
-uint32_t modeMSPRequests;
-uint32_t queuedMSPRequests;
-
 uint8_t Settings[EEPROM_ITEM_LOCATION];
 
 // For Settings Defaults
@@ -42,26 +26,6 @@ uint8_t Settings[EEPROM_ITEM_LOCATION];
 char screen[480];
 // ScreenBuffer is an intermietary buffer to created Strings to send to Screen buffer
 char screenBuffer[20];
-//uint16_t  MwAccSmooth[3]={0,0,0};       // Those will hold Accelerator data
-uint16_t MwRcData[8]={		// This hold receiver pulse signal
-1500,1500,1500,1500,1500,1500,1500,1500} ;
-	
-MW_ATTITUDE_t MW_ATT;
-MW_status_t MW_STATUS;
-MW_imu_t MW_IMU;
-
-//uint8_t MwVersion=0;
-
-//uint8_t MwVBat=0;
-//uint16_t MwRssi=0;
-//uint16_t MWAmperage=0;
-//uint16_t pMeterSum=0;
-MW_ANALOG_t MW_ANALOG;
-
-//uint16_t Debug1=0;
-
-uint8_t armed=0;
-uint8_t previousarmedstatus=0;  // for statistics after disarming
 
 // For Time
 uint16_t onTime=0;
@@ -72,14 +36,6 @@ float amperageADC =0;
 int16_t amperage_Int=0;
 float amperage = 0;                // its the real value x10
 float amperagesum = 0;
-
-// Rssi
-int16_t rssi =0;
-int16_t rssiADC=0;
-int16_t rssiMin;
-int16_t rssiMax;
-int16_t rssi_Int=0;
-
 
 // For Voltage
 uint16_t voltage=0;                      // its the value x10
@@ -94,28 +50,9 @@ uint8_t hi_speed_cycle = 50;
 uint8_t lo_speed_cycle = 100;
 //----------------
 
-void calculateRssi(void)
-{
-	float aa=0;
-	
-	aa = rssiADC;  // actual RSSI signal received  (already divided by 4)
-	aa = ((aa-Settings[S_RSSIMIN]) *101)/(Settings[S_RSSIMAX]-Settings[S_RSSIMIN]) ;  // Percentage of signal strength
-	rssi_Int += ( ( (signed int)((aa*rssiSample) - rssi_Int )) / rssiSample );  // Smoothing the readings
-	rssi = rssi_Int / rssiSample ;
-	if(rssi<0) rssi=0;
-	if(rssi>100) rssi=100;
-}
-
-
 
 void setup()
-{
-  SerialOpen(0,115200);
-  SerialFlush(0);
-  
-  //PWM RSSI
-  pinMode(PWMrssiPin, INPUT);
-  
+{ 
   //Led output
   pinMode(7,OUTPUT);  // PD7
  
@@ -147,38 +84,13 @@ void calculateAmperage(void)
 void loop()
 {
        // Process AI   
-  if (Settings[S_ENABLEADC]){
-    if (!Settings[S_MAINVOLTAGE_VBAT]){
       static uint16_t ind = 0;
       static uint32_t voltageRawArray[8];
       voltageRawArray[(ind++)%8] = analogRead(voltagePin);                  
       uint16_t voltageRaw = 0;
       for (uint16_t i=0;i<8;i++)
         voltageRaw += voltageRawArray[i];
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] /1023; 
-    }
-    if (!Settings[S_MWRSSI] && !Settings[S_PWMRSSI]) {
-      rssiADC = analogRead(rssiPin)/4;  // RSSI Readings, rssiADC=0 to 1023/4 (avoid a number > 255)
-    }
-    if (!Settings[S_MWAMPERAGE]) {
-      int16_t currsensOffSet=(Settings[S_CURRSENSOFFSET_L] | (Settings[S_CURRSENSOFFSET_H] << 8));  // Read OffSetH/L
-      amperageADC = analogRead(amperagePin);
-      if (amperageADC > currsensOffSet) amperageADC=((amperageADC-currsensOffSet)*4.8828)/Settings[S_CURRSENSSENSITIVITY]; // [A] Positive Current flow (512...1023) or Unidir (0...1023)
-      else amperageADC=((currsensOffSet-amperageADC)*4.8828)/Settings[S_CURRSENSSENSITIVITY]; // [A] Negative Current flow (0...512)
-      }
-}
-   if (Settings[S_MWAMPERAGE]) {
-     amperagesum = MW_ANALOG.pMeterSum;
-     amperage = MW_ANALOG.Amperage /100;
-    }
-	
-  if (Settings[S_MWRSSI]) {
-      rssiADC = MW_ANALOG.Rssi/4;  // RSSI from MWii, rssiADC=0 to 1023/4 (avoid a number > 255)
-    } 
-	
-  if (Settings[S_PWMRSSI] && !Settings[S_MWRSSI]){
-	rssiADC = pulseIn(PWMrssiPin, HIGH,15000)/Settings[S_PWMRSSIDIVIDER]; // Reading W/time out (microseconds to wait for pulse to start: 15000=0.015sec)
-    }
+      voltage = float(voltageRaw) * Settings[100] / 1023;
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   uint16_t currentMillis = millis();
@@ -186,31 +98,21 @@ void loop()
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
     previous_millis_low = currentMillis;
-	
+
 	tenthSec++;
 	TempBlinkAlarm++;
-	Blink10hz=!Blink10hz;
-	
-      
-    if(Settings[L_RSSIPOSITIONDSPL])
-      calculateRssi();      
+	Blink10hz=!Blink10hz;    
   }  // End of slow Timed Service Routine (100ms loop)
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
   {
     previous_millis_high = currentMillis;   
-    
-    if (!Settings[S_MWAMPERAGE]) calculateAmperage();  // Amperage and amperagesum integration on 50msec
        
       
         displayVoltage();
-        displayRSSI();
-        displayTime();;
+        displayTime();
         //displayAmperage();
         //displaypMeterSum();
-
-        if(MW_STATUS.sensorPresent&ACCELEROMETER)
-           displayHorizon(MW_ATT.Angle[0],MW_ATT.Angle[1]);
     
 	 MAX7456_DrawScreen();
   }  // End of fast Timed Service Routine (50ms loop)
@@ -229,16 +131,9 @@ void loop()
     
     tenthSec=0;
 
-    if(!armed) {
-      flyTime=0;
-    }
-    else {
       flyTime++;
       flyingTime++;
-    }
     allSec++;
-
-    if(rssiTimer>0) rssiTimer--;
   }
 
 }  // End of main loop

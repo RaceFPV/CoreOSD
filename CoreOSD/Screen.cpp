@@ -67,123 +67,11 @@ uint8_t FindNull(void)
   return xx;
 }
 
-void displayHorizon(int16_t rollAngle, int16_t pitchAngle)
-{
-	uint8_t X;
-	int16_t Y;
-	uint16_t pos;
-	
-	if(Settings[L_HORIZONPOSITIONDSPL]){
-		uint16_t position = ((Settings[L_HORIZONPOSITIONROW]-1)*30) + Settings[L_HORIZONPOSITIONCOL];
-		
-		for(X=0; X<=1; X++) {
-			Y = (rollAngle * (2-X)) / 64;
-			Y -= pitchAngle / 8;
-			Y += -5;
-			if(Y >= 10 && Y <= 50) {
-				pos = position + LINE+LINE*(Y/9) + 4 - 2*LINE + X;
-				screen[pos] = SYM_AH_BAR_0+(Y%9);
-				if(Y>=9 && (Y%9) == 0)
-				screen[pos-LINE] = SYM_AH_BAR_9;
-			}
-		}
-
-		for(X=0; X<=1; X++) {
-			Y = (rollAngle * (-1-X)) / 64;
-			Y -= pitchAngle / 8;
-			Y += -5;
-			if(Y >= 10 && Y <= 50) {
-				pos = position + LINE+LINE*(Y/9) + 7 - 2*LINE + X;
-				screen[pos] = SYM_AH_BAR_0+(Y%9);
-				if(Y>=9 && (Y%9) == 0)
-				screen[pos-LINE] = SYM_AH_BAR_9;
-			}
-		}
-
-		for(X=0; X<=2; X++) {
-			Y = (rollAngle * (4-X)) / 64;
-			Y -= pitchAngle / 8;
-			Y += 41;
-			if(Y >= 15 && Y <= 60) {
-				pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
-				screen[pos] = SYM_AH_BAR_0+(Y%9);
-				if(Y>=9 && (Y%9) == 0)
-				screen[pos-LINE] = SYM_AH_BAR_9;
-			}
-		}
-
-		for(X=0; X<=2; X++) {
-			Y = (rollAngle * (0-X)) / 64;
-			Y -= pitchAngle / 8;
-			Y += 41;
-			if(Y >= 15 && Y <= 60) {
-				pos = position + LINE*(Y/9) + 7 - 2*LINE + X;
-				screen[pos] = SYM_AH_BAR_0+(Y%9);
-				if(Y>=9 && (Y%9) == 0)
-				screen[pos-LINE] = SYM_AH_BAR_9;
-			}
-		}
-		
-		for(X=0; X<=1; X++) {
-			Y = (rollAngle * (2-X)) / 64;
-			Y -= pitchAngle / 8;
-			Y += 78;
-			if(Y >= 17 && Y <= 60) {
-				pos = position + LINE*(Y/9) + 4 - 2*LINE + X;
-				screen[pos] = SYM_AH_BAR_0+(Y%9);
-				if(Y>=9 && (Y%9) == 0)
-				screen[pos-LINE] = SYM_AH_BAR_9;
-			}
-		}
-
-		for(X=0; X<=1; X++) {
-			Y = (rollAngle * (-1-X)) / 64;
-			Y -= pitchAngle / 8;
-			Y += 78;
-			if(Y >= 17 && Y <= 60) {
-				pos = position + LINE*(Y/9) + 7 - 2*LINE + X;
-				screen[pos] = SYM_AH_BAR_0+(Y%9);
-				if(Y>=9 && (Y%9) == 0)
-				screen[pos-LINE] = SYM_AH_BAR_9;
-			}
-		}
-
-		if(Settings[L_HORIZONCENTERREFDSPL]){
-			//Draw center screen
-			screen[position+2*LINE+6] =   SYM_AH_CENTER;
-			screen[position+2*LINE+1] =   SYM_AH_LEFT;
-			screen[position+2*LINE+11] =  SYM_AH_RIGHT;
-		}
-		if(Settings[L_HORIZONSIDEREFDSPL]){
-			// Draw AH sides
-			screen[position+0*LINE +11] = SYM_AH_UP_15DG_L;
-			screen[position+1*LINE +11] = SYM_AH_UP_5_10DG_L;
-			screen[position+0*LINE +1] = SYM_AH_UP_15DG_R;
-			screen[position+1*LINE +1] = SYM_AH_UP_5_10DG_R;
-			screen[position+4*LINE +11] = SYM_AH_DOWN_15DG_L;
-			screen[position+3*LINE +11] = SYM_AH_DOWN_5_10DG_L;
-			screen[position+4*LINE +1] = SYM_AH_DOWN_15DG_R;
-			screen[position+3*LINE +1] = SYM_AH_DOWN_5_10DG_R;
-		}
-		pitchAngle=pitchAngle/10;
-	}
-}
-
  
 void displayVoltage(void)
 {
-    if (Settings[S_MAINVOLTAGE_VBAT]){
-      voltage=MW_ANALOG.VBat;
-    }
-      if (voltage <=(Settings[S_VOLTAGEMIN]) && !BlinkAlarm){  
-      //ItoaPadded(voltage, screenBuffer, 4, 3);
-      return;
-   }
-   if(!(MW_STATUS.sensorActive) || (voltage <=(Settings[S_VOLTAGEMIN]+2))){ 
       ItoaPadded(voltage, screenBuffer, 4, 3);
-      screenBuffer[5] = 0;
       MAX7456_WriteString(screenBuffer,443);
-      //MAX7456_WriteString(screenBuffer,((Settings[L_VOLTAGEPOSITIONROW]-1)*30) + Settings[L_VOLTAGEPOSITIONCOL]);
       /*
     if(Settings[L_MAINBATLEVEVOLUTIONDSPL]){
       // For battery evolution display
@@ -202,11 +90,6 @@ void displayVoltage(void)
       else if (voltage < BATTEV6) screenBuffer[0]=SYM_BATT_5;
       else screenBuffer[0]=SYM_BATT_FULL;              // Max charge icon
       }*/
-      screenBuffer[1]=0;
-      
-      MAX7456_WriteString(screenBuffer,443);
-      //MAX7456_WriteString(screenBuffer,((Settings[L_VOLTAGEPOSITIONROW]-1)*30) + Settings[L_VOLTAGEPOSITIONCOL]-1);
-   }
 }  
 
 
@@ -230,13 +113,11 @@ void displayTime(void)
 void displayAmperage(void)
 {
   // Real Ampere is ampere / 10
- if(!(MW_STATUS.sensorActive)){
   if(Settings[L_AMPERAGEPOSITIONDSPL]){
     ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
     screenBuffer[5] = 0;
     MAX7456_WriteString(screenBuffer,((Settings[L_AMPERAGEPOSITIONROW]-1)*30) + Settings[L_AMPERAGEPOSITIONCOL]);
   }
- }
 }
 
 void displaypMeterSum(void)
@@ -245,19 +126,6 @@ void displaypMeterSum(void)
   if(Settings[L_PMETERSUMPOSITIONDSPL]){  
     screenBuffer[1]=0;
     itoa(amperagesum,screenBuffer,10);
-	 if(!(MW_STATUS.sensorActive))
 		MAX7456_WriteString(screenBuffer,((Settings[L_PMETERSUMPOSITIONROW]-1)*30) + Settings[L_PMETERSUMPOSITIONCOL]);
  }
-}
-
-void displayRSSI(void)
-{
-  if(Settings[L_RSSIPOSITIONDSPL]){
-    if (rssi <=(Settings[S_RSSI_ALARM]) && !BlinkAlarm){
-      return;
-      }
-    itoa(rssi,screenBuffer,10);
-    uint8_t xx = FindNull();
-    screenBuffer[xx] = 0;
-  }
 }
