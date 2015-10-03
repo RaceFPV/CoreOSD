@@ -12,12 +12,10 @@
 
 // Batt IconÂ´s
 #define SYM_MAIN_BATT 0X97
-#define SYM_VID_BAT 0X98
 
 // Voltage and amperage
 #define SYM_VOLTS 0XC9
 #define SYM_AMPS 0XC8
-//#define SYM_CURRENT 0XA4
 #define SYM_CURRENT 0XBA
 
 // Time

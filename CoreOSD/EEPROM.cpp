@@ -20,12 +20,9 @@ EEPROMClass EEPROM;
 // For Settings Defaults
 static const uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 105, // S_VOLTAGEMIN                7
-3,   // S_BATCELLS                  8
 100, // S_DIVIDERRATIO              9
 1,   // S_MAINVOLTAGE_VBAT          10
-0,   // S_UNITSYSTEM                18
 1,   // S_VIDEOSIGNALTYPE           19
-1,   // S_ENABLEADC                 21
 5,   // S_BLINKINGHZ                22   // 10=1Hz, 9=1.1Hz, 8=1,25Hz, 7=1.4Hz, 6=1.6Hz, 5=2Hz, 4=2,5Hz, 3=3,3Hz, 2=5Hz, 1=10Hz
 40,  // S_CURRSENSSENSITIVITY       24   // May vary from 17 to 40mV/A (Sensor type)
 2,   // S_CURRSENSOFFSET_H          25   // offset(H/L) =0 for unidir sensors or =512 for bidirectional sensors, may be changed only of few units.

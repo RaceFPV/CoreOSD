@@ -7,12 +7,9 @@
 
 // Settings Locations
 enum Setting_ {
-  S_CHECK_,					// 0 used for check
   S_VOLTAGEMIN,				// 7
-  S_BATCELLS,				// 8
   S_DIVIDERRATIO, 			// 9
   S_MAINVOLTAGE_VBAT, 		// 10
-  S_UNITSYSTEM,				// 12
   S_VIDEOSIGNALTYPE, 		// 13
   S_BLINKINGHZ,    			// 15 selectable alarm blink freq
   S_CURRSENSSENSITIVITY, 	// 17
