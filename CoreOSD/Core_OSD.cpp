@@ -31,6 +31,9 @@ char screenBuffer[20];
 uint16_t onTime=0;
 uint16_t flyTime=0;
 
+// For Callsign
+char callSign[] = CALLSIGN;
+
 // For Amperage
 float amperageADC =0;
 int16_t amperage_Int=0;
@@ -111,7 +114,8 @@ void loop()
       
         displayVoltage();
         displayTime();
-        //displayAmperage();
+        displayAmperage();
+        displayCallsign();
         //displaypMeterSum();
     
 	 MAX7456_DrawScreen();

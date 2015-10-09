@@ -4,6 +4,7 @@
 
 	void displayVoltage(void);
 	void displayTime(void);
+  void displayCallsign(void);
 	void displayAmperage(void);
 	void displaypMeterSum(void);
 		

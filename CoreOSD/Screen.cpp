@@ -92,6 +92,10 @@ void displayVoltage(void)
       }*/
 }  
 
+void displayCallsign(void)
+{
+    MAX7456_WriteString(CALLSIGN,420);
+}
 
 void displayTime(void)
 {

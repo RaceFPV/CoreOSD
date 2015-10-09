@@ -17,7 +17,10 @@
 	// For Time
 	extern uint16_t onTime;
 	extern uint16_t flyTime;
-	
+
+  // For Callsign
+  //extern char callSign[];
+  
 	// For Amperage
 	extern int16_t amperage_Int;
 	extern float amperage;                // its the real value x10
