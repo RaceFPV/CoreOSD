@@ -4,3 +4,4 @@ Alpha build
 
 * Expects battery wired to microminimosd
 * Currently supporting Arduino IDE 1.6.3 and older
+* Change or disable the callsign in the bottom left by editing it in Config.h
