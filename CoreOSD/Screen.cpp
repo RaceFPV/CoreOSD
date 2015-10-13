@@ -16,7 +16,7 @@ char *ItoaPadded(int16_t val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   str[bytes] = 0;
   for(;;) {
     if(bytes == decimalpos) {
-      str[--bytes] = DECIMAL;
+      str[--bytes] = '.';
       decimalpos = 0;
     }
     str[--bytes] = '0' + (val % 10);
@@ -71,7 +71,7 @@ uint8_t FindNull(void)
 void displayVoltage(void)
 {
       ItoaPadded(voltage, screenBuffer, 4, 3);
-      MAX7456_WriteString(screenBuffer,443);
+      MAX7456_WriteString(screenBuffer,445);
       /*
     if(Settings[L_MAINBATLEVEVOLUTIONDSPL]){
       // For battery evolution display
@@ -94,7 +94,7 @@ void displayVoltage(void)
 
 void displayCallsign(void)
 {
-    MAX7456_WriteString(CALLSIGN,420);
+    MAX7456_WriteString(CALLSIGN,421);
 }
 
 void displayTime(void)
@@ -110,26 +110,21 @@ void displayTime(void)
  
 // On Time
       formatTime(onTime, screenBuffer, 0);
-      MAX7456_WriteString(screenBuffer,435);
-      //MAX7456_WriteString(screenBuffer,((Settings[L_ONTIMEPOSITIONROW]-1)*30) + Settings[L_ONTIMEPOSITIONCOL]);
+      MAX7456_WriteString(screenBuffer,439);
 }
 
 void displayAmperage(void)
 {
   // Real Ampere is ampere / 10
-  if(Settings[L_AMPERAGEPOSITIONDSPL]){
     ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
     screenBuffer[5] = 0;
-    MAX7456_WriteString(screenBuffer,((Settings[L_AMPERAGEPOSITIONROW]-1)*30) + Settings[L_AMPERAGEPOSITIONCOL]);
-  }
+    MAX7456_WriteString(screenBuffer,10);
 }
 
 void displaypMeterSum(void)
 {
-
-  if(Settings[L_PMETERSUMPOSITIONDSPL]){  
+  
     screenBuffer[1]=0;
     itoa(amperagesum,screenBuffer,10);
-		MAX7456_WriteString(screenBuffer,((Settings[L_PMETERSUMPOSITIONROW]-1)*30) + Settings[L_PMETERSUMPOSITIONCOL]);
- }
+		MAX7456_WriteString(screenBuffer,50);
 }

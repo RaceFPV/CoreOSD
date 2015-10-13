@@ -111,12 +111,23 @@ void loop()
   {
     previous_millis_high = currentMillis;   
        
-      
-        displayVoltage();
-        displayTime();
-        displayAmperage();
-        displayCallsign();
-        //displaypMeterSum();
+        //if statements to define what to show on screen.
+        //this should be moved to proper c++ code, not if statements
+        if(showVoltage == 1){
+          displayVoltage();
+        }
+        if(showTimer == 1){
+          displayTime();
+        }
+        if(showAmps == 1){
+          displayAmperage();
+        }
+        if(showCallsign == 1){
+          displayCallsign();
+        }
+        if(showMah == 1){
+          displaypMeterSum();
+        }
     
 	 MAX7456_DrawScreen();
   }  // End of fast Timed Service Routine (50ms loop)
