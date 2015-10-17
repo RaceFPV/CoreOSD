@@ -7,5 +7,6 @@
   void displayCallsign(void);
 	void displayAmperage(void);
 	void displaypMeterSum(void);
+  void displayCrosshair(void);
 		
 #endif /* SCREEN_H_ */

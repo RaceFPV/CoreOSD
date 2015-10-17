@@ -6,7 +6,6 @@
 	extern uint8_t Settings[];
 	extern char screen[];
 	extern char screenBuffer[];
-	extern uint16_t flyingTime;
 	
 	//General use variables
 	extern uint8_t TempBlinkAlarm;                       // Temporary for blink alarm
@@ -16,10 +15,6 @@
 
 	// For Time
 	extern uint16_t onTime;
-	extern uint16_t flyTime;
-
-  // For Callsign
-  //extern char callSign[];
   
 	// For Amperage
 	extern int16_t amperage_Int;

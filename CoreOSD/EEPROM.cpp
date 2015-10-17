@@ -30,69 +30,6 @@ static const uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 };
 
 
-// PAL item position Defaults
-static const uint8_t EEPROM_PAL_DEFAULT[EEPROM_ITEM_LOCATION-EEPROM_SETTINGS] = {
-	// ROW= Row position on screen (255= no action)
-	// COL= Column position on screen (255= no action)
-	// DSPL= Display item on screen
-
-	15,   // L_FLYTIMEPOSITIONROW LINE15+22
-	16,   // L_FLYTIMEPOSITIONCOL
-	0,    // L_FLYTIMEPOSITIONDSPL
-
-	15,   // L_ONTIMEPOSITIONROW LINE15+22
-	16,   // L_ONTIMEPOSITIONCOL
-	1,    // L_ONTIMEPOSITIONDSPL
-
-	15,   // L_VOLTAGEPOSITIONROW LINE15+3
-	23,   // L_VOLTAGEPOSITIONCOL
-	1,    // L_VOLTAGEPOSITIONDSPL
-
-	255,  // L_MAINBATLEVEVOLUTIONROW,
-	255,  // L_MAINBATLEVEVOLUTIONCOL,
-	1,    // L_MAINBATLEVEVOLUTIONDSPL,
-
-	14,   // L_AMPERAGEPOSITIONROW LINE15+10
-	23,   // L_AMPERAGEPOSITIONCOL
-	0,    // L_AMPERAGEPOSITIONDSPL
-
-	14,   // L_PMETERSUMPOSITIONROW LINE15+16
-	14,   // L_PMETERSUMPOSITIONCOL
-	0,    // L_PMETERSUMPOSITIONDSPL
-};
-
-
-// NTSC item position Defaults
-uint8_t EEPROM_NTSC_DEFAULT[EEPROM_ITEM_LOCATION-EEPROM_SETTINGS] = {
-	// ROW= Row position on screen (255= no action)
-	// COL= Column position on screen (255= no action)
-	// DSPL= Display item on screen
-  
-	13,   // L_FLYTIMEPOSITIONROW LINE15+22
-	16,   // L_FLYTIMEPOSITIONCOL
-	1,    // L_FLYTIMEPOSITIONDSPL
-
-	13,   // L_ONTIMEPOSITIONROW LINE15+22
-	14,   // L_ONTIMEPOSITIONCOL
-	0,    // L_ONTIMEPOSITIONDSPL
-
-	13,   // L_VOLTAGEPOSITIONROW LINE15+3
-	23,   // L_VOLTAGEPOSITIONCOL
-	1,    // L_VOLTAGEPOSITIONDSPL
-
-	255,  // L_MAINBATLEVEVOLUTIONROW
-	255,  // L_MAINBATLEVEVOLUTIONCOL
-	1,    // L_MAINBATLEVEVOLUTIONDSPL
-
-	12,   // L_AMPERAGEPOSITIONROW LINE15+10
-	23,   // L_AMPERAGEPOSITIONCOL
-	0,    // L_AMPERAGEPOSITIONDSPL
-
-	12,   // L_PMETERSUMPOSITIONROW LINE15+16
-	14,   // L_PMETERSUMPOSITIONCOL
-	0,    // L_PMETERSUMPOSITIONDSPL
-};
-
 void checkEEPROM(void)
 {
 	// For H/W Settings
@@ -100,12 +37,6 @@ void checkEEPROM(void)
 	if (!EEPROM_Loaded){
 		for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
 			if (EEPROM.read(en) != EEPROM_DEFAULT[en])  EEPROM.write(en,EEPROM_DEFAULT[en]);
-		}
-		// For items on screen.
-		// First run, the default will be NTSC (show all data lines with NTSC systems that has only 13 lines)
-		// In OSD menu' it's possible a quick default setup for PAL or NTSC
-		for(uint16_t en=0;en<EEPROM_ITEM_LOCATION-EEPROM_SETTINGS;en++) {
-			if (EEPROM.read(en+EEPROM_SETTINGS+1) != EEPROM_NTSC_DEFAULT[en]) EEPROM.write(en+EEPROM_SETTINGS+1,EEPROM_NTSC_DEFAULT[en]);
 		}
 	}
 }
@@ -132,20 +63,4 @@ void readEEPROM(void)
 	for(uint16_t en=0;en<EEPROM_ITEM_LOCATION-EEPROM_SETTINGS;en++){
 		Settings[en+EEPROM_SETTINGS+1] = EEPROM.read(en+EEPROM_SETTINGS+1);
 	}
-}
-
-// back to default setting & position for PAL/NTSC
-void WriteScreenLayoutDefault(void)
-{
-	if (Settings[S_VIDEOSIGNALTYPE]){  // PAL
-		for(uint16_t en=0;en<EEPROM_ITEM_LOCATION-EEPROM_SETTINGS;en++) {
-			if (EEPROM.read(en+EEPROM_SETTINGS+1) != EEPROM_PAL_DEFAULT[en]) EEPROM.write(en+EEPROM_SETTINGS+1,EEPROM_PAL_DEFAULT[en]);
-		}
-	}
-	else {
-		for(uint16_t en=0;en<EEPROM_ITEM_LOCATION-EEPROM_SETTINGS;en++) {
-			if (EEPROM.read(en+EEPROM_SETTINGS+1) != EEPROM_NTSC_DEFAULT[en]) EEPROM.write(en+EEPROM_SETTINGS+1,EEPROM_NTSC_DEFAULT[en]);
-		}
-	}
-	readEEPROM();  // Refresh with default data
 }

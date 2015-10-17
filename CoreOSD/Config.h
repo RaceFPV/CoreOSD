@@ -4,7 +4,7 @@
  
  //Analog input defines, do not change.
  #define voltagePin A2
- #define amperagePin A0
+ #define amperagePin A1
 
  //**** Displayed Screen Items ****//
  //Enable and disable features. Use 1 to turn a feature on, and 0 to turn that feature off.
@@ -13,6 +13,7 @@
  #define showCallsign 1
  #define showTimer 1
  #define showVoltage 1
+ #define showCrosshair 1
 
 
 //**** Callsign ****//

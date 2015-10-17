@@ -3,9 +3,8 @@
 #include "Arduino.h"
 #include "Config.h"
 #include "types.h"
-#include "EEPROM.h" //Needed to access eeprom read/write functions
+#include "EEPROM.h" //Needed to access eeprom read/write functions for screen size
 #include "Max7456.h"
-#include "symbols.h"
 #include "Screen.h"
 #include "CoreOSD.h"
 
@@ -29,7 +28,6 @@ char screenBuffer[20];
 
 // For Time
 uint16_t onTime=0;
-uint16_t flyTime=0;
 
 // For Callsign
 char callSign[] = CALLSIGN;
@@ -42,9 +40,6 @@ float amperagesum = 0;
 
 // For Voltage
 uint16_t voltage=0;                      // its the value x10
-
-// For Statistics
-uint16_t flyingTime=0;
 
 //-------------- Timed Service Routine vars (No need Metro.h library)
 uint16_t previous_millis_low=0;
@@ -128,6 +123,9 @@ void loop()
         if(showMah == 1){
           displaypMeterSum();
         }
+        if(showCrosshair == 1){
+          displayCrosshair();
+        }
     
 	 MAX7456_DrawScreen();
   }  // End of fast Timed Service Routine (50ms loop)
@@ -145,9 +143,6 @@ void loop()
     onTime++;
     
     tenthSec=0;
-
-      flyTime++;
-      flyingTime++;
     allSec++;
   }
 

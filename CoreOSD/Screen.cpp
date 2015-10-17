@@ -1,7 +1,6 @@
 #include "Arduino.h"
 #include "Config.h"
 #include "Max7456.h"
-#include "symbols.h"
 #include "CoreOSD.h"
 #include "Screen.h"
 
@@ -72,24 +71,6 @@ void displayVoltage(void)
 {
       ItoaPadded(voltage, screenBuffer, 4, 3);
       MAX7456_WriteString(screenBuffer,445);
-      /*
-    if(Settings[L_MAINBATLEVEVOLUTIONDSPL]){
-      // For battery evolution display
-      int16_t BATTEV1 =Settings[S_BATCELLS] * 35;
-      int16_t BATTEV2 =Settings[S_BATCELLS] * 36;
-      int16_t BATTEV3 =Settings[S_BATCELLS] * 37;
-      int16_t BATTEV4 =Settings[S_BATCELLS] * 38;
-      int16_t BATTEV5 =Settings[S_BATCELLS] * 40;
-      int16_t BATTEV6 = Settings[S_BATCELLS] * 41;
-  
-      if (voltage < BATTEV1) screenBuffer[0]=SYM_BATT_EMPTY;
-      else if (voltage < BATTEV2) screenBuffer[0]=SYM_BATT_1;
-      else if (voltage < BATTEV3) screenBuffer[0]=SYM_BATT_2;
-      else if (voltage < BATTEV4) screenBuffer[0]=SYM_BATT_3;
-      else if (voltage < BATTEV5) screenBuffer[0]=SYM_BATT_4;
-      else if (voltage < BATTEV6) screenBuffer[0]=SYM_BATT_5;
-      else screenBuffer[0]=SYM_BATT_FULL;              // Max charge icon
-      }*/
 }  
 
 void displayCallsign(void)
@@ -99,15 +80,6 @@ void displayCallsign(void)
 
 void displayTime(void)
 {
-// Fly Time
-  /*if(!(MW_STATUS.sensorActive)){
-  if(Settings[L_FLYTIMEPOSITIONDSPL]){
-      screenBuffer[0] = SYM_FLY;
-      formatTime(flyTime, screenBuffer+1, 0);
-      MAX7456_WriteString(screenBuffer,((Settings[L_FLYTIMEPOSITIONROW]-1)*30) + Settings[L_FLYTIMEPOSITIONCOL]);
-  }
- }*/  
- 
 // On Time
       formatTime(onTime, screenBuffer, 0);
       MAX7456_WriteString(screenBuffer,439);
@@ -119,6 +91,11 @@ void displayAmperage(void)
     ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
     screenBuffer[5] = 0;
     MAX7456_WriteString(screenBuffer,10);
+}
+
+void displayCrosshair(void)
+{
+    MAX7456_WriteString("-+-",224);
 }
 
 void displaypMeterSum(void)
