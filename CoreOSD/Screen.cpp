@@ -70,19 +70,19 @@ uint8_t FindNull(void)
 void displayVoltage(void)
 {
       ItoaPadded(voltage, screenBuffer, 4, 3);
-      MAX7456_WriteString(screenBuffer,445);
+      MAX7456_WriteString(screenBuffer,385);
 }  
 
 void displayCallsign(void)
 {
-    MAX7456_WriteString(CALLSIGN,421);
+    MAX7456_WriteString(CALLSIGN,360);
 }
 
 void displayTime(void)
 {
 // On Time
       formatTime(onTime, screenBuffer, 0);
-      MAX7456_WriteString(screenBuffer,439);
+      MAX7456_WriteString(screenBuffer,378);
 }
 
 void displayAmperage(void)

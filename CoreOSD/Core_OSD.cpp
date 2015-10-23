@@ -22,7 +22,7 @@ uint8_t Settings[EEPROM_ITEM_LOCATION];
 // For Settings Defaults
 
 // Screen is the Screen buffer between program an MAX7456 that will be writen to the screen at 10hz
-char screen[480];
+char screen[390];
 // ScreenBuffer is an intermietary buffer to created Strings to send to Screen buffer
 char screenBuffer[20];
 

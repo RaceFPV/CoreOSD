@@ -50,22 +50,12 @@ void MAX7456_Setup(void)
 
   MAX7456Configure();
 
-  if(Settings[S_VIDEOSIGNALTYPE]) {    // PAL
-    //ENABLE_display = 0x48;
-    //ENABLE_display_vert = 0x4c;
-    MAX7456_reset = 0x42;
-    //DISABLE_display = 0x40;
-    MAX_screen_size = 480;
-    MAX_screen_rows = 16;
-  }
-  else {                                // NTSC
     //ENABLE_display = 0x08;
     //ENABLE_display_vert = 0x0c;
     MAX7456_reset = 0x02;
     //DISABLE_display = 0x00;
     MAX_screen_size = 390;
     MAX_screen_rows = 13;
-  }
 
   pinMode(MAX7456RESET,OUTPUT);
   digitalWrite(MAX7456RESET,HIGH); //hard enable

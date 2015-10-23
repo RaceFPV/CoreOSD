@@ -18,7 +18,7 @@
 
 //**** Callsign ****//
 //Change the callsign _inside_ the quotes to edit the text displayed on screen. No special characters please!
-#define CALLSIGN "CoreOSD"
+#define CALLSIGN "Doings"
 
 
 //End of code, do not change.
