@@ -9,11 +9,16 @@
 #include "CoreOSD.h"
 
 //General use variables
-uint8_t tenthSec=0;
-uint8_t TempBlinkAlarm=0;                       // Temporary for blink alarm
-uint8_t BlinkAlarm=0;                           // This is turning on and off at selected freq. (alarm)
-uint8_t Blink10hz=0;                            // This is turning on and off at 10hz
 
+struct  __timer {
+  uint8_t  tenthSec;
+  uint8_t  halfSec;
+  uint8_t  Blink2hz;                          // This is turing on and off at 2hz
+  uint8_t  Blink10hz;                         // This is turing on and off at 10hz
+  uint32_t seconds;
+}
+timer;
+uint8_t fontMode = 0;
 uint16_t allSec=0;
 
 // Mode bits
@@ -32,20 +37,16 @@ uint16_t onTime=0;
 // For Callsign
 char callSign[] = CALLSIGN;
 
-// For Amperage
-float amperageADC =0;
-int16_t amperage_Int=0;
-float amperage = 0;                // its the real value x10
-float amperagesum = 0;
-
 // For Voltage
 uint16_t voltage=0;                      // its the value x10
 
 //-------------- Timed Service Routine vars (No need Metro.h library)
-uint16_t previous_millis_low=0;
-uint16_t previous_millis_high =0;
-uint8_t hi_speed_cycle = 50;
-uint8_t lo_speed_cycle = 100;
+unsigned long previous_millis_low=0;
+unsigned long previous_millis_high =0;
+unsigned long previous_millis_sync =0;
+unsigned long sync_speed_cycle =33;
+unsigned long hi_speed_cycle = 50;
+unsigned long lo_speed_cycle = 100;
 //----------------
 
 
@@ -62,23 +63,6 @@ void setup()
 }
 
 
-void calculateAmperage(void)
-{
-	float aa=0;
-	// calculation of amperage [A*10]
-	aa = amperageADC*10;   // *10 We want one decimal digit
-	amperage_Int += ( ( (signed int)((aa* 10) - amperage_Int )) / 10 );  // Smoothing the displayed value with average of 10 samples
-	amperage = (amperage_Int / 10);
-	if (amperage >=999) amperage=999;  // [A*10]
-	
-	// Calculation of amperagesum = amperage integration on 50msec (without reading average)
-	// 720= *100/72000 --> where:
-	// *100=mA (instead of *1000 as the value is already multiplied by 10)
-	// 72000=n. of 50ms in 1 hour
-	amperagesum += aa /720; // [mAh]    // NOTE: if want add 3%, change this "amperagesum += aa /690;"
-}
-
-
 void loop()
 {
        // Process AI   
@@ -91,20 +75,25 @@ void loop()
       voltage = float(voltageRaw) * 100 / 1020;
 
   //---------------  Start Timed Service Routines  ---------------------------------------
-  uint16_t currentMillis = millis();
+  unsigned long currentMillis = millis();
+
+  //enable high speed
+  if((currentMillis - previous_millis_sync) >= sync_speed_cycle)  // (Executed > NTSC/PAL hz 33ms)
+  {
+    previous_millis_sync = previous_millis_sync+sync_speed_cycle;
+  }
 
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
-    previous_millis_low = currentMillis;
-
-	tenthSec++;
-	TempBlinkAlarm++;
-	Blink10hz=!Blink10hz;    
+    previous_millis_low = previous_millis_low+lo_speed_cycle;    
+    timer.tenthSec++;
+    timer.halfSec++;
+    timer.Blink10hz=!timer.Blink10hz;    
   }  // End of slow Timed Service Routine (100ms loop)
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
   {
-    previous_millis_high = currentMillis;   
+    previous_millis_high = previous_millis_high+hi_speed_cycle;
        
         //if statements to define what to show on screen.
         //this should be moved to proper c++ code, not if statements
@@ -114,14 +103,8 @@ void loop()
         if(showTimer == 1){
           displayTime();
         }
-        if(showAmps == 1){
-          displayAmperage();
-        }
         if(showCallsign == 1){
           displayCallsign();
-        }
-        if(showMah == 1){
-          displaypMeterSum();
         }
         if(showCrosshair == 1){
           displayCrosshair();
@@ -130,19 +113,14 @@ void loop()
 	 MAX7456_DrawScreen();
   }  // End of fast Timed Service Routine (50ms loop)
 //---------------------  End of Timed Service Routine ---------------------------------------
-
-
-  if(TempBlinkAlarm >= Settings[S_BLINKINGHZ]) {    // selectable alarm blink freq
-    TempBlinkAlarm = 0;
-    BlinkAlarm =!BlinkAlarm;     // 10=1Hz, 9=1.1Hz, 8=1.25Hz, 7=1.4Hz, 6=1.6Hz, 5=2Hz, 4=2.5Hz, 3=3.3Hz, 2=5Hz, 1=10Hz
-  }
-
  
-  if(tenthSec >= 10)     // this execute 1 time a second
+  if(millis() > timer.seconds+1000)     // this execute 1 time a second
   {
+    timer.seconds+=1000;
+    timer.tenthSec=0;
     onTime++;
-    
-    tenthSec=0;
+    //check to see if the MAX chip crashed
+    MAX7456Stalldetect();
     allSec++;
   }
 

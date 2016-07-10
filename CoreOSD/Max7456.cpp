@@ -45,6 +45,7 @@ void MAX7456Configure() {
 }
 
 
+
 void MAX7456_Setup(void)
 {
 
@@ -122,7 +123,19 @@ void MAX7456_Setup(void)
   sei();
 }
 
-
+  
+  void MAX7456Stalldetect(void){
+    uint8_t srdata;
+    pinMode(MAX7456SELECT,OUTPUT);
+    digitalWrite(MAX7456SELECT,LOW);  
+    spi_transfer(0x80);
+    srdata = spi_transfer(0xFF); 
+    digitalWrite(MAX7456SELECT,HIGH);
+    if ((B00001000 & srdata) == 0){
+      MAX7456_Setup(); 
+    }
+   }
+   
 // Copy string from ram into screen buffer
 void MAX7456_WriteString(const char *string, int Adresse)
 {
@@ -216,6 +229,7 @@ void MAX7456_DrawScreen()
   spi_transfer(B00000000);
   
   digitalWrite(MAX7456SELECT,HIGH);
+
 delay(20);
 }
 

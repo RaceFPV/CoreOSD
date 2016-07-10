@@ -112,6 +112,7 @@
 	void MAX7456_writeNVM(uint8_t char_address);
 	void MAX7456_Setup(void);
 	void MAX7456_DrawScreen();
+  void MAX7456Stalldetect();
 	void MAX7456_WriteString(const char *string, int Adresse);
 	void MAX7456_WriteString_P(const char *string, int Adresse);
 	
