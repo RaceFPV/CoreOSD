@@ -87,8 +87,8 @@ void loop()
       voltageRawArray[(ind++)%8] = analogRead(voltagePin);                  
       uint16_t voltageRaw = 0;
       for (uint16_t i=0;i<8;i++)
-        voltageRaw += voltageRawArray[i];
-      voltage = float(voltageRaw) * 100 / 1023;
+      voltageRaw += voltageRawArray[i];
+      voltage = float(voltageRaw) * 100 / 1020;
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   uint16_t currentMillis = millis();
